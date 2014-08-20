@@ -1,3 +1,8 @@
+" " Plugins
+" " Useful : a.vim, bufexplorer.vim, conque_term.vim,
+"            cscope_maps.vim, grep.vim
+" " Maybe  : fugitive.vim, taglist.vim, winfileexplorer.vim,
+"            winmanager.vim, wintagexplorer.vim
 
 " " needed for omnicppcomplete
 "set nocp
