@@ -205,7 +205,7 @@ comm! -nargs=? -bang SettingsForGo call SettingsForGo()
 "autocmd FileType go setlocal st=4 sw=4 noexpand list!
 "autocmd BufRead,BufNewFile   *.c,*.h,*.java set noic cin noexpandtab
 "autocmd BufRead,BufNewFile   *.pl syntax on
-autocmd BufRead,BufNewFile   *.go set st=4 sw=4 list! noexpandtab
+autocmd BufRead,BufNew,BufNewFile   *.go set st=4 sw=4 list! noexpandtab
 " " In text files, always limit the width of text to 78 characters
 "autocmd BufRead *.txt set tw=78
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
