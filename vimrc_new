@@ -1,0 +1,236 @@
+" " vimrc
+
+" " ====== START Vundle settings ======
+" " Launch vim and run :PluginInstall
+" " To install from command line: vim +PluginInstall +qall
+
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+" Keep Plugin commands between vundle#begin/end.
+Plugin 'fatih/vim-go'
+Plugin 'majutsushi/tagbar'
+Plugin 'jlanzarotta/bufexplorer'
+Plugin 'vim-scripts/a.vim'
+Plugin 'vim-scripts/Conque-Shell'
+Plugin 'Lokaltog/vim-powerline'
+Plugin 'scrooloose/syntastic'
+Plugin 'kien/ctrlp.vim'
+
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+" " ====== END Vundle settings ======
+
+" " ====== START Default settings ======
+set tabstop=4             "tab size
+set softtabstop=4         "soft tab size
+set shiftwidth=4          "set shift width
+set expandtab             "convert tab to spaces
+"set cindent              "indent
+set smartindent           "smart indent
+set list                  "show special char
+set ls=2                  "show filename at bottom
+set modelines=0           "disable modeline parsing
+set nomodeline            "disable modeline parsing
+syntax on                 "turn on syntax
+set mouse=ni              "Use mouse
+set t_Co=256              "Use 256 colors
+set wrap                  "Lines cannot fit in window will be wrapped
+set autochdir             "Auto change the vim working directory to that of the current buffer
+set hlsearch              "Highlight searching
+set incsearch             "Turn on incremental search
+set tags=./tags,tags;     "Where to find tags files
+
+:hi search ctermbg=LightBlue  "Set hightlight color
+" " ====== END Default settings ======
+
+" " ====== ctags settings ======
+comm! -nargs=? -bang RunCtags exe "!ctags -R --c++-kinds=+p --fields=+iaS --extra=+fq ."
+
+" " ====== BufExplorer settings ======
+cabbrev Be BufExplorer
+cabbrev Bv VSBufExplorer
+cabbrev Bh HSBufExplorer
+
+" " ====== A.vim settings ======
+" " Set search path for a.vim
+let g:alternateSearchPath = 'sfr:..,sfr:./api,sfr:../source,sfr:../src,sfr:../include,sfr:../inc'
+" " Run :A to find header file
+" " Run :IH to find the file under cursor
+
+" " ====== ConqueTerm settings ======
+cabbrev term
+      \ ConqueTerm bash
+
+" " ====== vimgrep settings ======
+cabbrev Grep
+      \ noautocmd vimgrep /\<lt><C-R><C-W>\>/gj
+      \ ./**/*<C-R>=(expand("%:e")=="" ? "" : ".".expand("%:e"))<CR>
+      \ <Bar> cw
+      \ <C-Left><C-Left><C-Left>
+
+" " ====== cscope settings ======
+cabbrev csfc
+      \ cs find c <C-R>=(expand("<cword>")=="" ? "" : expand("<cword>"))<CR>
+      \ <C-Left>
+cabbrev csfd
+      \ cs find d <C-R>=(expand("<cword>")=="" ? "" : expand("<cword>"))<CR>
+      \ <C-Left>
+cabbrev csfe
+      \ cs find e <C-R>=(expand("<cword>")=="" ? "" : expand("<cword>"))<CR>
+      \ <C-Left>
+cabbrev csff
+      \ cs find f <C-R>=(expand("<cword>")=="" ? "" : expand("<cword>"))<CR>
+      \ <C-Left>
+cabbrev csfg
+      \ cs find g <C-R>=(expand("<cword>")=="" ? "" : expand("<cword>"))<CR>
+      \ <C-Left>
+cabbrev csfi
+      \ cs find i <C-R>=(expand("<cword>")=="" ? "" : expand("<cword>"))<CR>
+      \ <C-Left>
+cabbrev csfs
+      \ cs find s <C-R>=(expand("<cword>")=="" ? "" : expand("<cword>"))<CR>
+      \ <C-Left>
+cabbrev csft
+      \ cs find t <C-R>=(expand("<cword>")=="" ? "" : expand("<cword>"))<CR>
+      \ <C-Left>
+cabbrev csf
+      \ cs find
+
+" " ====== pathogen bundle settings ======
+"execute pathogen#infect()
+
+" " ====== gotags settings ======
+" From gotags github webpage
+function! SetTagbarForGo()
+    let g:tagbar_type_go = {
+        \ 'ctagstype' : 'go',
+        \ 'kinds'     : [
+            \ 'p:package',
+            \ 'i:imports:1',
+            \ 'c:constants',
+            \ 'v:variables',
+            \ 't:types',
+            \ 'n:interfaces',
+            \ 'w:fields',
+            \ 'e:embedded',
+            \ 'm:methods',
+            \ 'r:constructor',
+            \ 'f:functions'
+        \ ],
+        \ 'sro' : '.',
+        \ 'kind2scope' : {
+            \ 't' : 'ctype',
+            \ 'n' : 'ntype'
+        \ },
+        \ 'scope2kind' : {
+            \ 'ctype' : 't',
+            \ 'ntype' : 'n'
+        \ },
+        \ 'ctagsbin'  : 'gotags',
+        \ 'ctagsargs' : '-sort -silent'
+    \ }
+endfunction
+
+" " ====== Command to fix arrow keys when using vi remotely or via tmux
+function! FixArrowKeys()
+    set t_ku=[A
+    set t_kd=[B
+    set t_kr=[C
+    set t_kl=[D
+endfunction
+comm! -nargs=? -bang FixArrowKeys call FixArrowKeys()
+
+" " ====== Command to disable auto commenting ======
+comm! -nargs=? -bang AutoCommentOff setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+" " ====== Command to resize windows interactively ======
+function! s:getchar()
+    let c = getchar()
+    if c =~ '^\d\+$'
+        let c = nr2char(c)
+    endif
+    return c
+endfunction
+
+function! ResizeWindowWidth(dx)
+    execute "vertical:res " . a:dx
+endfunction
+
+function! ResizeWindowHeight(dy)
+    execute "res " . a:dy
+endfunction
+
+function! AutoResizeWindow()
+endfunction
+
+function! ResizeWindow()
+    let char = "s"
+    while char =~ '^\w$'
+        echo "(InteractiveWindow) TYPE: h,j,k,l to resize or a for auto resize"
+        let char = s:getchar()
+        if char == "h" | call ResizeWindowWidth("-1") | endif
+        if char == "j" | call ResizeWindowHeight("+1") | endif
+        if char == "k" | call ResizeWindowHeight("-1") | endif
+        if char == "l" | call ResizeWindowWidth("+1") | endif
+        if char == "a" | call AutoResizeWindow() | endif
+        redraw
+    endwhile
+endfunction
+
+comm! -nargs=? -bang ResizeWindow call ResizeWindow()
+
+" " ====== golang settings ======
+function! SettingsForGo()
+    set tabstop=4
+    set shiftwidth=4
+    set noexpandtab
+    set list!
+    call SetTagbarForGo()
+endfunction
+comm! -nargs=? -bang SettingsForGo call SettingsForGo()
+
+" " ====== File type based settings ======
+"autocmd FileType go setlocal st=4 sw=4 noexpand list!
+"autocmd BufRead,BufNewFile   *.c,*.h,*.java set noic cin noexpandtab
+"autocmd BufRead,BufNewFile   *.pl syntax on
+autocmd BufRead,BufNewFile   *.go set st=4 sw=4 list! noexpandtab
+" " In text files, always limit the width of text to 78 characters
+"autocmd BufRead *.txt set tw=78
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+filetype plugin on
+
+" " ====== Zli commands ======
+function! ZliCmd()
+    echo "[1] :AutoCommentOff"
+    echo "[2] :FixArrowKeys"
+    echo "[3] :PluginInstall - Vundle"
+    echo "[4] :ResizeWindow"
+    echo "[5] :SettingsForGo"
+    echo "[6] :SettingsForMakefile"
+    echo "[7] :TagbarToggle"
+    echo "Choose a function to execute:"
+
+    let char = s:getchar()
+    if char == "1" | call AutoCommentOff()      | endif
+    if char == "2" | call FixArrowKeys()        | endif
+    if char == "3" | exe  "PluginInstall"       | endif
+    if char == "4" | call ResizeWindow()        | endif
+    if char == "5" | call SettingsForGo()       | endif
+    if char == "6" | call SettingsForGo()       | endif
+    if char == "7" | call tagbar#ToggleWindow() | endif
+endfunction
+
+comm! -nargs=? -bang Z call ZliCmd()
+
